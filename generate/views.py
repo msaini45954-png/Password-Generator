@@ -1,20 +1,53 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 import string
-import random
+import secrets
 import re
 
 
-# Create your views here.
 def home(request):
     context = {}
 
     if request.method == "POST":
-        password_length = int(request.POST.get("myRange"))
+
+        is_ajax = (
+            request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        )
+
+        try:
+            password_length = int(request.POST.get("myRange", 8))
+        except (ValueError, TypeError):
+            return JsonResponse(
+                {"error": "Invalid password length"},
+                status=400
+            )
+
+        # Validate password length
+        if not 1 <= password_length <= 50:
+            return JsonResponse(
+                {"error": "Password length must be between 1 and 50"},
+                status=400
+            )
+
         chars = request.POST.getlist("option")
+
+        if not chars:
+            return JsonResponse(
+                {"error": "Select at least one character option"},
+                status=400
+            )
 
         password = create_password(password_length, chars)
         strength = password_strength(password)
 
+        # Return JSON for AJAX requests
+        if is_ajax:
+            return JsonResponse({
+                "new_password": password,
+                "strength": strength
+            })
+
+        # Normal form submission fallback
         context["new_password"] = password
         context["strength"] = strength
 
@@ -39,7 +72,8 @@ def create_password(length, chars):
     if not char:
         char = string.ascii_letters
 
-    return "".join(random.choice(char) for _ in range(length))
+    # secrets.choice is more suitable for secure passwords
+    return "".join(secrets.choice(char) for _ in range(length))
 
 
 def password_strength(password):
@@ -57,10 +91,13 @@ def password_strength(password):
 
     if re.search(r"[A-Z]", password):
         score += 1
+
     if re.search(r"[a-z]", password):
         score += 1
+
     if re.search(r"[0-9]", password):
         score += 1
+
     if re.search(r"[^A-Za-z0-9]", password):
         score += 1
 
