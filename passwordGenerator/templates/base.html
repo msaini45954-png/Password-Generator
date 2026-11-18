@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+    <h1>Password Generator</h1>
+    <div id="data">
+    <form method="POST">
+        {% csrf_token %}
+        <H2>{{strength|default:"Strength of Password"}}</H2><br><br>
+        <input type="text" placeholder="Your Password..." readonly id="pass" value="{{new_password|default:''}}">
+        <button type="button" id="copy_password" name="copy_password" onclick="copyPassword()">
+            Copy Password
+        </button>
+        <br>
+        <button id="generate" name="generate_btn">
+            Generate
+        </button>
+        <br>
+        <h2>Select Range of Characters</h2><br>
+        <input type="range" min="1" max="50" value="8" id="myRange" name="myRange"><br>
+        <p>Value: <span id="output">10</span></p><br>
+        <input type="checkbox" name="option" id="uppercase" value="uppercase" checked>Uppercase
+        <input type="checkbox" name="option" id="lowercase" value="lowercase" checked>Lowercase
+        <input type="checkbox" name="option" id="numbers" value="numbers" checked>Numbers
+        <input type="checkbox" name="option" id="symbols" value="symbols" checked >Symbols
+    </form>
+    </div>
+    <script>
+        let checkboxes = document.querySelectorAll('input[name="option"]');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                let checkedCount = document.querySelectorAll('input[name="option"]:checked').length;
+
+                if (checkedCount === 0) {
+                    cb.checked = true; // re-check it
+                    //alert("At least one checkbox must remain checked!");
+                }
+            });
+        });
+    </script>
+
+    <script>
+        let range = document.getElementById("myRange");
+        let output = document.getElementById("output");
+
+        // Show default value
+        output.textContent = range.value;
+
+        // Update value when slider moves
+        range.oninput = function() {
+            output.textContent = this.value;
+            console.log(this.value); // check in console
+        }
+    </script>
+
+    <script>
+        function copyPassword() {
+            const password = document.getElementById("pass").value;
+
+            if (!password) {
+                alert("No password to copy!");
+                return;
+            }
+
+            navigator.clipboard.writeText(password)
+                .then(() => alert("Copied!"))
+                .catch(() => alert("Copy failed!"));
+        }
+    </script>
+</body>
+</html>
