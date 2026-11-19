@@ -161,7 +161,6 @@ Configure the following environment variables in Render:
 This project does not require a database. Passwords are generated dynamically without storing user-generated passwords in a database.
 
 ## 📸 Screenshots
-
 <!-- Add your screenshot path below -->
 ### Desktop View
 
