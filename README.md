@@ -1,8 +1,10 @@
 # 🔐 Password Generator
 
-A simple, modern, and responsive **Password Generator Web Application** built using **Python, Django, HTML, CSS, and JavaScript**.
+A modern, responsive **Password Generator Web Application** built using **Python, Django, HTML, CSS, and JavaScript**.
 
-This application allows users to generate random passwords with customizable options to create strong and secure passwords easily.
+This application allows users to generate strong and secure random passwords with customizable options. It features a clean user interface and is deployed on **Render**.
+
+🌐 **Live Demo:** [Password Generator](https://password-generator-sr7u.onrender.com/)
 
 ## ✨ Features
 
@@ -13,8 +15,10 @@ This application allows users to generate random passwords with customizable opt
 - Include numbers (0–9).
 - Include special characters (!@#$%).
 - Copy generated passwords to clipboard.
-- Clean and user-friendly interface.
-- Responsive design.
+- Modern and user-friendly interface.
+- Responsive design for different screen sizes.
+- Secure configuration using environment variables.
+- Deployed and accessible online.
 
 ## 🛠️ Technologies Used
 
@@ -23,8 +27,12 @@ This application allows users to generate random passwords with customizable opt
 | Python | Backend programming |
 | Django | Web framework |
 | HTML5 | Website structure |
-| CSS3 | Styling and layout |
+| CSS3 | Styling and responsive layout |
 | JavaScript | Frontend interactivity |
+| Gunicorn | Production WSGI server |
+| WhiteNoise | Static file serving |
+| Render | Cloud hosting |
+| Git & GitHub | Version control and source code hosting |
 
 ## 📁 Project Structure
 
@@ -56,8 +64,15 @@ Password-Generator/
 ├── templates/
 │   └── base.html
 │
+├── screenshots/
+│   └── homepage.png
+│   └── mobile-1.jpeg
+|   └── mobile-2.jpeg
+|
 ├── .gitignore
+├── build.sh
 ├── manage.py
+├── requirements.txt
 ├── LICENSE
 └── README.md
 ```
@@ -69,7 +84,7 @@ Follow these steps to run the project locally.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/Password-Generator.git
+git clone https://github.com/msaini45954-png/Password-Generator.git
 ```
 
 ### 2. Navigate to the Project Directory
@@ -95,7 +110,7 @@ venv\Scripts\activate
 ### 5. Install Dependencies
 
 ```bash
-pip install django
+pip install -r requirements.txt
 ```
 
 ### 6. Run the Development Server
@@ -106,30 +121,75 @@ python manage.py runserver
 
 ### 7. Open in Browser
 
-Visit the following URL:
+Visit:
 
 ```text
 http://127.0.0.1:8000/
 ```
 
+## 🚀 Deployment
+
+This project is deployed using **Render**.
+
+To deploy your own version:
+
+1. Push your project to GitHub.
+2. Create a new Web Service on [Render](https://render.com/).
+3. Connect your GitHub repository.
+4. Select the `main` branch.
+5. Configure the following settings:
+
+| Setting | Value |
+|---|---|
+| Runtime | Python 3 |
+| Build Command | `bash build.sh` |
+| Start Command | `gunicorn passwordGenerator.wsgi:application` |
+
+### Environment Variables
+
+Configure the following environment variables in Render:
+
+| Variable | Value |
+|---|---|
+| `SECRET_KEY` | Your Django secret key |
+| `DEBUG` | `False` |
+
+**Important:** Keep your Django secret key private. Never upload it to GitHub.
+
+## 🗄️ Database
+
+This project does not require a database. Passwords are generated dynamically without storing user-generated passwords in a database.
+
 ## 📸 Screenshots
 
-Screenshots of the application will be added here to showcase its interface.
+<!-- Add your screenshot path below -->
+### Desktop View
 
-<!-- Add your actual screenshot path below. -->
+<p align="center">
+  <img src="screenshots/homepage.png" width="800" alt="Desktop View">
+</p>
 
+### Mobile View
+
+<p align="center">
+  <img src="screenshots/mobile-1.jpeg" width="300" alt="Mobile Screenshot 1">
+  <img src="screenshots/mobile-2.jpeg" width="300" alt="Mobile Screenshot 2">
+</p>
 <!-- ![Password Generator](screenshots/homepage.png) -->
 
 ## 🎯 Learning Outcomes
 
-This project helped me improve my understanding of:
+Through this project, I improved my understanding of:
 
 - Python and Django fundamentals.
 - Django project and application structure.
 - Frontend and backend integration.
 - HTML, CSS, and JavaScript.
-- Building responsive web interfaces.
-- Developing a functional web application.
+- Responsive web design.
+- Managing project dependencies using `requirements.txt`.
+- Environment variables and deployment configuration.
+- Deploying Django applications using Render.
+- Using Git and GitHub for version control.
 
 ## 📄 License
 
@@ -140,7 +200,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 **Mohit Saini**
 
 - GitHub: [msaini45954-png](https://github.com/msaini45954-png)
-- LinkedIn: [linkedin.com/in/mohit-saini-a11804367](linkedin.com/in/mohit-saini-a11804367)
+- LinkedIn: [Mohit Saini](https://www.linkedin.com/in/mohit-saini-a11804367/)
 
 ---
 
