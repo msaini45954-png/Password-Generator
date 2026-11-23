@@ -1,133 +1,99 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Password Generator</title>
+
     {% load static %}
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/scripts.js' %}" defer></script>
 </head>
+
 <body>
+
     <header>
         <h1>Password Generator</h1>
     </header>
+
     <main>
         <div id="data">
+
             <form method="POST">
                 {% csrf_token %}
-                <H2 id="strength">{{strength|default:"Strength of Password"}}</H2><br><br>
-                <input type="text" placeholder="Your Password..." readonly id="pass" value="{{new_password|default:''}}">
-                <button type="button" id="copy_password" name="copy_password" onclick="copyPassword()">
+
+                <h2 id="strength">
+                    {{ strength|default:"Strength of Password" }}
+                </h2>
+
+                <input
+                    type="text"
+                    placeholder="Your Password..."
+                    readonly
+                    id="pass"
+                    value="{{ new_password|default:'' }}"
+                >
+
+                <button type="button" id="copy_password" name="copy_password">
                     Copy Password
                 </button>
-                <br>
+
                 <button type="submit" id="generate" name="generate_btn">
                     Generate
                 </button>
-                <br>
-                <h2>Select Range of Characters</h2><br>
-                <input type="range" min="1" max="50" value="8" id="myRange" name="myRange"><br>
-                <p>Value: <span id="output">10</span></p><br>
-                <input type="checkbox" name="option" id="uppercase" value="uppercase" checked>Uppercase
-                <input type="checkbox" name="option" id="lowercase" value="lowercase" checked>Lowercase
-                <input type="checkbox" name="option" id="numbers" value="numbers" checked>Numbers
-                <input type="checkbox" name="option" id="symbols" value="symbols" checked >Symbols
+
+                <h2>Select Range of Characters</h2>
+
+                <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    value="8"
+                    id="myRange"
+                    name="myRange"
+                >
+
+                <p>Value: <span id="output">8</span></p>
+
+                <div class="checkbox-group">
+
+                    <label>
+                        <input type="checkbox" name="option" id="uppercase"
+                            value="uppercase" checked>
+                        Uppercase
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="option" id="lowercase"
+                            value="lowercase" checked>
+                        Lowercase
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="option" id="numbers"
+                            value="numbers" checked>
+                        Numbers
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="option" id="symbols"
+                            value="symbols" checked>
+                        Symbols
+                    </label>
+
+                </div>
+
             </form>
+
         </div>
-        <script>
-            let checkboxes = document.querySelectorAll('input[name="option"]');
-
-            checkboxes.forEach(cb => {
-                cb.addEventListener('change', () => {
-                    let checkedCount = document.querySelectorAll('input[name="option"]:checked').length;
-
-                    if (checkedCount === 0) {
-                        cb.checked = true; // re-check it
-                        //alert("At least one checkbox must remain checked!");
-                    }
-                });
-            });
-        </script>
-
-        <script>
-            let range = document.getElementById("myRange");
-            let output = document.getElementById("output");
-
-            // Show default value
-            output.textContent = range.value;
-
-            // Update value when slider moves
-            range.oninput = function() {
-                output.textContent = this.value;
-                console.log(this.value); // check in console
-            }
-        </script>
-
-        <script>
-            function copyPassword() {
-                const password = document.getElementById("pass").value;
-
-                if (!password) {
-                    alert("No password to copy!");
-                    return;
-                }
-
-                navigator.clipboard.writeText(password)
-                    .then(() => alert("Copied!"))
-                    .catch(() => alert("Copy failed!"));
-            }
-        </script>
-
-        <script>
-            const form = document.querySelector("form");
-
-            form.addEventListener("submit", async function(event) {
-                event.preventDefault();
-
-                const generateButton = document.getElementById("generate");
-                const passwordField = document.getElementById("pass");
-                const strengthHeading = document.querySelector("#strength");
-
-                generateButton.disabled = true;
-                generateButton.textContent = "Generating...";
-
-                try {
-                    const formData = new FormData(form);
-
-                    const response = await fetch(window.location.href, {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error("Password generation failed");
-                    }
-
-                    const data = await response.json();
-
-                    passwordField.value = data.new_password;
-
-                    if (data.strength) {
-                        strengthHeading.textContent = data.strength;
-                    }
-
-                } catch (error) {
-                    console.error(error);
-                    alert("Something went wrong. Please try again.");
-
-                } finally {
-                    generateButton.disabled = false;
-                    generateButton.textContent = "Generate";
-                }
-            });
-
-        </script>
     </main>
+
     <footer>
         &copy; 2026 Password Generator. All rights reserved.
     </footer>
+
 </body>
 </html>
